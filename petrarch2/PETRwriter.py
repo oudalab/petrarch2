@@ -23,11 +23,11 @@
 # 22-Nov-13:	Initial version
 # ------------------------------------------------------------------------
 
-from __future__ import print_function
-from __future__ import unicode_literals
 
-import PETRglobals  # global variables
-import utilities
+
+
+from . import PETRglobals  # global variables
+from . import utilities
 import codecs
 import json
 
@@ -77,13 +77,13 @@ def write_events(event_dict, output_file):
             story_date = event[0]
             source = event[1]
             target = event[2]
-            code = filter(lambda a: not a == '\n', event[3])
+            code = [a for a in event[3] if not a == '\n']
 
             ids = ';'.join(filtered_events[event]['ids'])
 
             if 'issues' in filtered_events[event]:
                 iss = filtered_events[event]['issues']
-                issues = ['{},{}'.format(k, v) for k, v in iss.items()]
+                issues = ['{},{}'.format(k, v) for k, v in list(iss.items())]
                 joined_issues = ';'.join(issues)
             else:
                 joined_issues = []
@@ -94,7 +94,7 @@ def write_events(event_dict, output_file):
 #            event_str = '{}\t{}\t{}\t{}'.format(story_date,source,target,code)
             # 15.04.30: a very crude hack around an error involving multi-word
             # verbs
-            if not isinstance(event[3], basestring):
+            if not isinstance(event[3], str):
                 event_str = '\t'.join(
                     event[:3]) + '\t010\t' + '\t'.join(event[4:])
             else:
@@ -172,7 +172,7 @@ def write_nullverbs(event_dict, output_file):
             return [item]
 
     event_output = []
-    for key, value in event_dict.iteritems():
+    for key, value in event_dict.items():
         if not 'nulls' in value['meta']:
             # print('Error:',value['meta'])  # log this and figure out where it
             # is coming from <later: it occurs for discard sentences >
@@ -243,14 +243,14 @@ def write_nullactors(event_dict, output_file):
         return text
 
     event_output = []
-    for key, value in event_dict.iteritems():
+    for key, value in event_dict.items():
         if not value['sents']:
             continue
         for sent in value['sents']:
             if 'meta' in value['sents'][sent]:
                 if 'actortext' not in value['sents'][sent]['meta']:
                     continue
-                for evt, txt in value['sents'][sent]['meta']['actortext'].iteritems(
+                for evt, txt in value['sents'][sent]['meta']['actortext'].items(
                 ):  # <16.06.26 pas > stop the madness!!! -- we're 5 levels deep here, which is as bad as TABARI. This needs refactoring!
                     hasnull = False
                     jsonout = {'id': key,
@@ -328,7 +328,7 @@ def pipe_output(event_dict):
 
                 if 'issues' in filtered_events[event]:
                     iss = filtered_events[event]['issues']
-                    issues = ['{},{}'.format(k, v) for k, v in iss.items()]
+                    issues = ['{},{}'.format(k, v) for k, v in list(iss.items())]
                     joined_issues = ';'.join(issues)
                     event_str = (story_date, source, target, code,
                                  joined_issues, ids, url, StorySource)
