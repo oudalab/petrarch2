@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
 
 import os
 import sys
@@ -48,11 +48,11 @@ import argparse
 # 20-Nov-14:	write_actor_root/text added to parse_Config
 # ------------------------------------------------------------------------
 
-import PETRglobals  # global variables
-import PETRreader  # input routines
-import PETRwriter
-import utilities
-import PETRtree
+from . import PETRglobals  # global variables
+from . import PETRreader  # input routines
+from . import PETRwriter
+from . import utilities
+from . import PETRtree
 
 
 # ========================== VALIDATION FUNCTIONS ========================== #
@@ -209,7 +209,7 @@ def do_coding(event_dict):
             NSent += 1
             if 'parsed' in event_dict[key]['sents'][sent]:
                 if 'config' in val['sents'][sent]:
-                    for _, config in event_dict[key]['sents'][sent]['config'].items():
+                    for _, config in list(event_dict[key]['sents'][sent]['config'].items()):
                         change_Config_Options(config)
 
                 SentenceID = '{}_{}'.format(key, sent)
@@ -293,7 +293,7 @@ def do_coding(event_dict):
                         event_dict[key]['sents'][sent]['issues'] = event_issues
 
                 if PETRglobals.PauseBySentence:
-                    if len(input("Press Enter to continue...")) > 0:
+                    if len(eval(input("Press Enter to continue..."))) > 0:
                         sys.exit()
 
                 prev_code = coded_events
