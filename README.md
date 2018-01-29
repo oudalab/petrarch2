@@ -1,4 +1,4 @@
-PETRARCH-2
+PETRARCH-3
 ==========
 
 [![Join the chat at https://gitter.im/openeventdata/petrarch2](https://badges.gitter.im/openeventdata/petrarch2.svg)](https://gitter.im/openeventdata/petrarch2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -11,6 +11,7 @@ PETRARCH-2
 
 [![Caerus logo](http://caerusassociates.com/wp-content/uploads/2012/03/Caerus_logo.png)](http://caerusassociates.com/wp-content/uploads/2012/03/Caerus_logo.png)
 
+
 Code for the new Python Engine for Text Resolution And Related Coding Hierarchy (PETRARCH-2) 
 event data coder. The coder now has all of the functions from the older TABARI coder 
 and the new CAMEO.2.0.txt verb dictionary incorporates more syntactic information and is far
@@ -18,6 +19,9 @@ simpler than the previous version.
 
 
 For more information, please read the Petrarch2.pdf file in this directory and visit the [documentation](http://petrarch2.readthedocs.org/en/latest/#).
+
+### Python 3 Compatible
+This is a Fork of Petrarch2 that is compatible with Python3.0. All code is converted, most errors are preserved. It is no longer compatible with Python 2.
 
 ## Citation
 
