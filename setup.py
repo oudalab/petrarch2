@@ -18,4 +18,4 @@ setup(
     url='openeventdata.org',
     license='LICENSE.txt',
     description='PETRARCH 2 parser for event data.',
-    long_description=open('README.md').read())
+    long_description=open('README.md', encoding="utf-8").read())
