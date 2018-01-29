@@ -34,14 +34,14 @@
 # ------------------------------------------------------------------------
 
 
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
 
 import os
 import logging
 #import corenlp
 import dateutil.parser
-import PETRglobals
+from . import PETRglobals
 from collections import defaultdict, Counter
 
 nulllist = []  # used when PETRglobals.NullVerbs == True
@@ -96,7 +96,7 @@ nulllist = []  # used when PETRglobals.NullVerbs == True
 
 
 def parse_to_text(parse):
-    x = filter(lambda a: not a.startswith("("), parse.replace(")", "").split())
+    x = [a for a in parse.replace(")", "").split() if not a.startswith("(")]
     r = "" + x[0]
     for item in x[1:]:
         r += " " + item
@@ -216,7 +216,7 @@ def extract_phrases(sent_dict, sent_id):
             # --            print('   GEP1:',st)
             if isinstance(
                     st,
-                    basestring):  # handles those  ~ a (a b Q) SAY = a b Q cases I haven't figured out yet [pas 16.04.20]
+                    str):  # handles those  ~ a (a b Q) SAY = a b Q cases I haven't figured out yet [pas 16.04.20]
                 continue
             if len(st) > 1:
                 if '[' in st[1]:  # create a phrase for a pattern
@@ -430,7 +430,7 @@ def code_to_string(events):
     try:
         def ev_to_string(ev):
             local = ""
-            if isinstance(ev, basestring):
+            if isinstance(ev, str):
                 return ev
             up = str(ev[0])
             low = ev[1]
@@ -810,7 +810,7 @@ def convert_code(code, forward=1):
         return active, passive
 
     else:
-        reverse = dict(map(lambda a: (a[1], a[0]), cat.items()) +  # Other weird quirks
+        reverse = dict([(a[1], a[0]) for a in list(cat.items())] +  # Other weird quirks
                        [(0x30a0, "138"),   # Want to attack
 
                         ])
