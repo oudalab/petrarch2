@@ -84,11 +84,11 @@ various components working smoothly in various hardware environments -- but fund
 If you do decide you want to work with PETRARCH-2 as a standalone program, it is possible to install:
 
 
-``pip install git+https://github.com/openeventdata/petrarch2.git``
+``pip3 install git+https://github.com/oudalab/petrarch2.git``
 
 Some users may experience issues with this, which 
 
-``pip install git+https://github.com/openeventdata/petrarch2.git --ignore-installed``
+``pip3 install git+https://github.com/oudalab/petrarch2.git --ignore-installed``
 
 should clear up.
 
@@ -110,8 +110,6 @@ a CoreNLP parse into a script, or the Stanford website has a nice [web app](http
 syntactic parse in Treebank form. Or if you're not looking to edit Petrarch itself and just
 use its functionality, [hypnos](https://github.com/caerusassociates/hypnos) is an easier option.
 
-Petrarch2 only runs in Python 2. Unfortunately, Python 3 is not supported and
-will fail with an opaque message.
 
 ## Running PETRARCH-2
 
