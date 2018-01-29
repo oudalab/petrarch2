@@ -36,8 +36,8 @@
 # ------------------------------------------------------------------------
 
 
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
 
 import io
 import re
@@ -49,12 +49,12 @@ import xml.etree.ElementTree as ET
 from functools import reduce
 
 try:
-    from ConfigParser import ConfigParser
+    from configparser import ConfigParser
 except ImportError:
     from configparser import ConfigParser
 
-import PETRglobals
-import utilities
+from . import PETRglobals
+from . import utilities
 
 
 # ================== STRINGS ================== #
@@ -740,7 +740,7 @@ def read_verb_dictionary(verb_path):
         '''
         segs = line.split()
         # print(line)
-        syns = filter(lambda a: '&' in a, segs)
+        syns = [a for a in segs if '&' in a]
         lines = []
         if syns:
             set = syns[0].replace(
@@ -814,11 +814,10 @@ def read_verb_dictionary(verb_path):
 
             index += 1
 
-        preps = map(lambda a: segment[a[0]:a[1] + 1],
-                    zip(prepstarts, prepends))
+        preps = [segment[a[0]:a[1] + 1] for a in zip(prepstarts, prepends)]
         prep_pats = []
         for phrase in preps:
-            phrase = map(lambda a: a.replace("(", "").replace(")", ""), phrase)
+            phrase = [a.replace("(", "").replace(")", "") for a in phrase]
             p = phrase[0]
             pnps = []
             pmodifiers = []
@@ -983,8 +982,8 @@ def read_verb_dictionary(verb_path):
             path = PETRglobals.VerbDict['transformations']
             while len(ev2) > 1:
                 source = ev2[0]
-                verb = reduce(lambda a, b: a + b, map(lambda c: utilities.convert_code(PETRglobals.VerbDict[
-                              'verbs'][c]['#']['#']['code'])[0] if not c == "Q" else -1, ev2[-1].split("_")), 0)
+                verb = reduce(lambda a, b: a + b, [utilities.convert_code(PETRglobals.VerbDict[
+                              'verbs'][c]['#']['#']['code'])[0] if not c == "Q" else -1 for c in ev2[-1].split("_")], 0)
 
                 path = path.setdefault(verb, {})
                 path = path.setdefault(source, {})
@@ -1642,7 +1641,7 @@ def show_verb_dictionary(filename=''):
         fout.write('PETRARCH Verb Dictionary Internal Format\n')
         fout.write('Run time: ' + PETRglobals.RunTimeString + '\n')
 
-        for locword, loclist in PETRglobals.VerbDict.items():
+        for locword, loclist in list(PETRglobals.VerbDict.items()):
             if locword[0] == '&':   # debug: skip the synsets
                 continue
             fout.write(locword)
@@ -1659,7 +1658,7 @@ def show_verb_dictionary(filename=''):
         fout.close()
 
     else:
-        for locword, loclist in PETRglobals.VerbDict.items():
+        for locword, loclist in list(PETRglobals.VerbDict.items()):
             print(locword, end=' ')
             if loclist[0]:
                 if len(loclist) > 2:
