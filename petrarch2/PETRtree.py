@@ -1,13 +1,13 @@
 
 
-from __future__ import print_function
-from __future__ import unicode_literals
 
 
-import PETRglobals
-import PETRreader
+
+
+from . import PETRglobals
+from . import PETRreader
 import time
-import utilities
+from . import utilities
 import types
 import logging
 
@@ -95,11 +95,7 @@ class Phrase:
         """
 
         if self.label in "SBAR":
-            lower = map(
-                lambda b: b.get_meaning(),
-                filter(
-                    lambda a: a.label in "SBARVP",
-                    self.children))
+            lower = [b.get_meaning() for b in [a for a in self.children if a.label in "SBARVP"]]
             events = []
             for item in lower:
                 events += item
@@ -212,10 +208,10 @@ class Phrase:
             if ag == '~PPL' and len(agents) > 1:
                 continue
 #            actors = map( lambda a : mix( a[0], ag[1:]), actors)
-            actors = map(lambda a: mix(a, ag[1:]), actors)
+            actors = [mix(a, ag[1:]) for a in actors]
 
 # --        print('mc-1',actors)
-        return filter(lambda a: a not in ['', '~', '~~', None], actors)
+        return [a for a in actors if a not in ['', '~', '~~', None]]
 
         # 16.04.25 hmmm, this is either a construct of utterly phenomenal
         # subtlety or else we never hit this code...
@@ -257,29 +253,21 @@ class Phrase:
         try:
             if self.label == 'S':
                 self.head, self.head_phrase = map(
-                    lambda b: b.get_head(), filter(
-                        lambda a: a.label == 'VP', self.children))[0]
+                    lambda b: b.get_head(), [a for a in self.children if a.label == 'VP'])[0]
                 return (self.head, self.head_phrase)
             elif self.label == 'ADVP':
                 return self.children[0].text, self
             if (not self.label[1] == 'P'):
                 return (self.text, self.parent)
 
-            head_children = filter(
-                lambda child: child.label.startswith(
-                    self.label[0]) and not child.label[1] == 'P',
-                self.children)
+            head_children = [child for child in self.children if child.label.startswith(
+                    self.label[0]) and not child.label[1] == 'P']
             if head_children:
-                possibilities = filter(
-                    None, map(
-                        lambda a: a.get_head(), head_children))
+                possibilities = [_f for _f in [a.get_head() for a in head_children] if _f]
             else:
-                other_children = filter(
-                    lambda child: child.label.startswith(
-                        self.label[0]), self.children)
-                possibilities = filter(
-                    None, map(
-                        lambda a: a.get_head(), other_children))
+                other_children = [child for child in self.children if child.label.startswith(
+                        self.label[0])]
+                possibilities = [_f for _f in [a.get_head() for a in other_children] if _f]
 
             self.head_phrase = possibilities[-1][1]
             # return the last, English usually compounds words to the front
@@ -417,18 +405,24 @@ class NounPhrase(Phrase):
                     else:
                         date.append(str(PETRreader.dstr_to_ordate(d)))
                 curdate = self.date
+                # curdate = PETRreader.dstr_to_ordate(self.date)
+                # curdate = int(self.date)
+                #import pdb; pdb.set_trace();
                 if not date:
                     code = j[0]
                 elif len(date) == 1:
                     if date[0][0] == '<':
-                        if curdate < int(date[0][1:]):
+                       # if curdate < int(date[0][1:]):
+                       if False:
                             code = j[0]
                     else:
-                        if curdate >= int(date[0][1:]):
+                        if str(int(curdate)) >= str(int(date[0][1:])):
                             code = j[0]
                 else:
-                    if curdate < int(date[1]):
-                        if curdate >= int(date[0]):
+                    # if curdate < int(date[1]):
+                    if False:
+                        # if curdate >= int(date[0]):
+                        if True:
                             code = j[0]
 
                 if code:
@@ -454,6 +448,7 @@ class NounPhrase(Phrase):
                     return match
             if '#' in path:
                 if isinstance(path["#"], list):
+                    #import pdb; pdb.set_trace() # pdb
                     code = self.check_date(path['#'])
                     if not code is None:
                         # --                         print('NPgm-rec-1:',code)  # --
@@ -477,6 +472,8 @@ class NounPhrase(Phrase):
 
         matched_txt = []
 
+        #import pdb; pdb.set_trace()
+
         for child in self.children:
             if isinstance(child, NounPhrase):
                 # --                print('NPgm-NP:',child.text)  # --
@@ -496,7 +493,7 @@ class NounPhrase(Phrase):
 
             elif child.label == "VP":
                 m = child.get_meaning()
-                if m and isinstance(m[0][1], basestring):
+                if m and isinstance(m[0][1], str):
                     m = self.resolve_codes(m[0][1])
                     if m[0]:
                         VPcodes += child.get_theme()
@@ -548,6 +545,7 @@ class NounPhrase(Phrase):
             if match:
                 # --                print('NPgm-m-1:',match)
                 codes += match[0]
+                #codes += match[-1][0][0] # Added my CEG
                 roots += match[3]
                 index += match[2]
                 matched_txt += [match[1]]
@@ -716,7 +714,7 @@ class VerbPhrase(Phrase):
             if self.children[0].label == "VBN":
                 helping = ["HAVE", "HAD", "HAVING", "HAS"]
                 if ((not (self.parent.get_head()[0] in helping or self.parent.children[0].text in helping)) and
-                    len(filter(lambda a: isinstance(a, VerbPhrase), self.parent.children)) <= 1 and
+                    len([a for a in self.parent.children if isinstance(a, VerbPhrase)]) <= 1 and
                         not self.check_passive()):
 
                     self.valid = False
@@ -742,7 +740,7 @@ class VerbPhrase(Phrase):
         information in the VerbPhrase.
         """
         m = self.get_meaning()
-        if isinstance(m[0], basestring):
+        if isinstance(m[0], str):
             return [m[0]]
         if m[0][1] == 'passive':
             return m[0][0]
@@ -804,7 +802,7 @@ class VerbPhrase(Phrase):
         else:
             curparse = self.get_parse_string()
 
-        s_options = filter(lambda a: a.label in "SBAR", self.children)
+        s_options = [a for a in self.children if a.label in "SBAR"]
 
         def resolve_events(event):
             """
@@ -901,7 +899,7 @@ class VerbPhrase(Phrase):
             elif low:
                 events.append(low)
 
-        lower = map(lambda a: a.get_meaning(), s_options)
+        lower = [a.get_meaning() for a in s_options]
         sents = []
 
         for item in lower:
@@ -1073,14 +1071,12 @@ class VerbPhrase(Phrase):
 #        self.get_lower = self.return_lower
 
         lower = []
-        v_options = filter(
-            lambda a: (
+        v_options = [a for a in self.children if (
                 isinstance(
                     a,
-                    VerbPhrase) and a.is_valid()),
-            self.children)
+                    VerbPhrase) and a.is_valid())]
 
-        lower = map(lambda a: a.get_meaning(), v_options)
+        lower = [a.get_meaning() for a in v_options]
 
         events = []
 
@@ -1170,7 +1166,7 @@ class VerbPhrase(Phrase):
 #        self.get_code = self.return_code
         meta = []
         dict = PETRglobals.VerbDict['verbs']
-        if 'AND' in map(lambda a: a.text, self.children):
+        if 'AND' in [a.text for a in self.children]:
             return 0, 0, ['and']
         patterns = PETRglobals.VerbDict['phrases']
         verb = "TO" if self.children[0].label == "TO" else self.get_head()[0]
@@ -1181,9 +1177,9 @@ class VerbPhrase(Phrase):
         if verb in dict:
             code = 0
             path = dict[verb]
-            if ['#'] == path.keys():
+            if ['#'] == list(path.keys()):
                 path = path['#']
-                if True or path.keys() == ['#']:  # Pre-compounds are weird
+                if True or list(path.keys()) == ['#']:  # Pre-compounds are weird
                     try:
                         code = path['#']['code']
                         meaning = path['#']['meaning']
@@ -1268,8 +1264,8 @@ class VerbPhrase(Phrase):
 
             if isinstance(event, tuple):
                 actor = None if not event[0] else tuple(event[0])
-                masks = filter(lambda a: a in pdict, [event[2], event[2] - event[2] % 0x10,
-                                                      event[2] - event[2] % 0x100, event[2] - event[2] % 0x1000])
+                masks = [a for a in [event[2], event[2] - event[2] % 0x10,
+                                                      event[2] - event[2] % 0x100, event[2] - event[2] % 0x1000] if a in pdict]
                 if masks:
                     path = pdict[masks[0]]
                 elif -1 in pdict:
@@ -1343,7 +1339,7 @@ class VerbPhrase(Phrase):
             # phrase, if specified
             if not phrase:
                 return False
-            for item in filter(lambda b: b.text in path, phrase.children):
+            for item in [b for b in phrase.children if b.text in path]:
                 subpath = path[item.text]
                 match = reroute(
                     subpath, lambda a: match_phrase(
@@ -1404,8 +1400,8 @@ class VerbPhrase(Phrase):
         def match_prep(path, phrase=self):
             # Matches preposition
             # --              print('mp-entry')
-            for item in filter(lambda b: isinstance(
-                    b, PrepPhrase), phrase.children):
+            for item in [b for b in phrase.children if isinstance(
+                    b, PrepPhrase)]:
                 prep = item.children[0].text
                 if prep in path:
                     subpath = path[prep]
@@ -1617,7 +1613,7 @@ class Sentence:
             store = metadict[id(next)]
             meta_total.append(store)
             next = store[0]
-        return map(lambda a: a[-2] if len(a) > 1 else a[0], meta_total[::-1])
+        return [a[-2] if len(a) > 1 else a[0] for a in meta_total[::-1]]
 
     def return_events(self):
         return self.events
@@ -1648,11 +1644,7 @@ class Sentence:
             print('--',ch.label, ch.get_text())"""
         if PETRglobals.NullVerbs or PETRglobals.NullActors:
             utilities.nulllist = []
-        events = map(
-            lambda a: a.get_meaning(),
-            filter(
-                lambda b: b.label in "SVP",
-                self.tree.children))  # which is to say, label is (S or (VP
+        events = [a.get_meaning() for a in [b for b in self.tree.children if b.label in "SVP"]]  # which is to say, label is (S or (VP
         """print('GF1',events) # --
         self.print_nouns('GF2') # -- """
         if PETRglobals.NullVerbs:
@@ -1670,7 +1662,7 @@ class Sentence:
                     if event[1] == 'passive':
                         event = (event[0], None, event[2])
                     if isinstance(event, tuple) and isinstance(
-                            event[1], basestring):
+                            event[1], str):
 
                         code = utilities.convert_code(event[2], 0)
                         print('checking event', event, hex(event[2]))
