@@ -4,7 +4,7 @@ with open('requirements.txt', 'r') as f:
         required = f.read().splitlines()
 
 setup(
-    name='petrarch2',
+    name='petrarch3',
     install_requires=required,
     entry_points={
         'console_scripts': ['petrarch2 = petrarch2.petrarch2:main']},
