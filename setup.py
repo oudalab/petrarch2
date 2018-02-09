@@ -8,7 +8,7 @@ setup(
     install_requires=required,
     entry_points={
         'console_scripts': ['petrarch2 = petrarch2.petrarch2:main']},
-    version='1.0.0',
+    version='1.1.0',
     author='Philip Schrodt, John Beieler, Clayton Norris',
     author_email='openeventdata@gmail.com',
     packages=['petrarch2'],
