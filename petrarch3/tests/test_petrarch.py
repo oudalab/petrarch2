@@ -1,20 +1,20 @@
-from petrarch2 import petrarch2, PETRglobals, PETRreader, utilities
-from petrarch2 import PETRtree as ptree
+from petrarch3 import petrarch3, PETRglobals, PETRreader, utilities
+from petrarch3 import PETRtree as ptree
 import sys
 
 
-config = petrarch2.utilities._get_data('data/config/', 'PETR_config.ini')
+config = petrarch3.utilities._get_data('data/config/', 'PETR_config.ini')
 print("reading config")
 sys.stdout.write('Mk1\n')
-petrarch2.PETRreader.parse_Config(config)
+petrarch3.PETRreader.parse_Config(config)
 print("reading dicts")
-petrarch2.read_dictionaries()
+petrarch3.read_dictionaries()
 
 
 
 
 def test_version():
-    assert petrarch2.get_version() == "1.2.0"
+    assert petrarch3.get_version() == "1.2.0"
 
 
 def test_read():
@@ -194,7 +194,7 @@ def test_simple():
     dict = {u'test123': {u'sents': {u'0': {u'content': text, u'parsed': parsed}},
                 u'meta': {u'date': u'20010101'}}}
 
-    return_dict = petrarch2.do_coding(dict)
+    return_dict = petrarch3.do_coding(dict)
     print(return_dict)
     assert return_dict['test123']['sents']['0']['events'] == [('DEU','FRA','192')]
 
@@ -207,7 +207,7 @@ def test_simple2():
     dict = {u'test123': {u'sents': {u'0': {u'content': text, u'parsed': parsed}},
                 u'meta': {u'date': u'20010101'}}}
 
-    return_dict = petrarch2.do_coding(dict)
+    return_dict = petrarch3.do_coding(dict)
     print(return_dict)
     assert return_dict['test123']['sents']['0']['events'] == [('DEU','FRA','173')]
 
@@ -239,7 +239,7 @@ def test_complex1():
 
     dict = {u'test123': {u'sents': {u'0': {u'content': text, u'parsed': parsed}},
                 u'meta': {u'date': u'20010101'}}}
-    return_dict = petrarch2.do_coding(dict)
+    return_dict = petrarch3.do_coding(dict)
     print(return_dict)
     assert return_dict['test123']['sents']['0']['events'] == [('TUNJUD','NGAEDU','173')]
 

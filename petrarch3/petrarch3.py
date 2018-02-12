@@ -333,7 +333,7 @@ def parse_cli_args():
 PETRARCH2
 (https://openeventdata.github.io/) (v. 1.0.0)
     """
-    aparse = argparse.ArgumentParser(prog='petrarch2',
+    aparse = argparse.ArgumentParser(prog='petrarch3',
                                      description=__description__)
 
     sub_parse = aparse.add_subparsers(dest='command_name')
