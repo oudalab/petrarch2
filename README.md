@@ -44,8 +44,8 @@ If you use PETRARCH2, please cite using the following BibTeX:
 
 ## First, a couple of notes...
 
-It is possible to run PETRARCH-2 as a stand-alone program. Most of our
-development work has gone into incorporating PETRARCH-2 into a full pipeline of
+It is possible to run PETRARCH-3 as a stand-alone program. Most of our
+development work has gone into incorporating PETRARCH-3 into a full pipeline of
 utilities, through, e.g., the [Phoenix pipeline](https://github.com/openeventdata/phoenix_pipeline).
 There's also a RESTful wrapper around PETRARCH and CoreNLP named
 [hypnos](https://github.com/caerusassociates/hypnos). It's probably worthwhile
@@ -81,24 +81,24 @@ amount of customization, particularly in the initial formating of source texts a
 various components working smoothly in various hardware environments -- but fundamentally, yes, it works.
 
 ## Installing
-If you do decide you want to work with PETRARCH-2 as a standalone program, it is possible to install:
+If you do decide you want to work with PETRARCH-3 as a standalone program, it is possible to install:
 
 
-``pip3 install git+https://github.com/oudalab/petrarch2.git``
+``pip3 install git+https://github.com/oudalab/petrarch3.git``
 
 Some users may experience issues with this, which 
 
-``pip3 install git+https://github.com/oudalab/petrarch2.git --ignore-installed``
+``pip3 install git+https://github.com/oudalab/petrarch3.git --ignore-installed``
 
 should clear up.
 
 This will install the program with a command-line hook. You can now run the program using:
 
-``petrarch2 <COMMAND NAME> [OPTIONS]``
+``petrarch3 <COMMAND NAME> [OPTIONS]``
 
 You can get more information using:
 
-``petrarch2 -h``
+``petrarch3 -h``
 
 **StanfordNLP:**
 
@@ -111,20 +111,20 @@ syntactic parse in Treebank form. Or if you're not looking to edit Petrarch itse
 use its functionality, [hypnos](https://github.com/caerusassociates/hypnos) is an easier option.
 
 
-## Running PETRARCH-2
+## Running PETRARCH-3
 
-Currently, you can run PETRARCH-2 using the following command if installed:
+Currently, you can run PETRARCH-3 using the following command if installed:
 
-``petrarch2 batch [-i <INPUT FILE> ] [-o [<OUTPUT FILE>]``
+``petrarch3 batch [-i <INPUT FILE> ] [-o [<OUTPUT FILE>]``
 
 If not installed:
 
-``python petrarch2.py batch -i <INPUT FILE> -o <OUTPUT FILE>``
+``python petrarch3.py batch -i <INPUT FILE> -o <OUTPUT FILE>``
 
 You can see a sample of the input/output by running (assuming you're in the
 PETRARCH2 directory):
 
-``petrarch2 batch -i ./petrarch2/data/text/GigaWord.sample.PETR.xml -o test.txt``
+``petrarch3 batch -i ./petrarch2/data/text/GigaWord.sample.PETR.xml -o test.txt``
 
 This will return a file named `evts.test.txt`.
 
@@ -148,22 +148,24 @@ by TravisCI upon Pull Request to the master directory, and will tell us whether
 the version has passed the tests. If for whatever reason you need to change the 
 tests or add cases to the test file, state that in the PR description. 
 
-## PETRARCH-1 vs. PETRARCH-2
+## PETRARCH-1 vs. PETRARCH-3
+
+Note, this is a direct port from PETRARCH-2.
 
 While these two programs share a name, actor dictionary formats and input formats, they are effectively
 two different programs:
 
 * Because it used the verb dictionaries from [TABARI](http://eventdata.parusanalytics.com/software.dir/tabari.html), a coder based on shallow parsing, PETRARCH-1 made relatively little use of the CoreNLP constituency parse beyond parts-of-speech
-markup and noun-phrase markup. PETRARCH-2 makes full use of the deep parse.
+markup and noun-phrase markup. PETRARCH-3 makes full use of the deep parse.
 
-* The verb dictionary for PETRARCH-2 is both different in the way it specifies patterns, and significantly simpler than the dictionaries in PETRARCH-1.
+* The verb dictionary for PETRARCH-3 is both different in the way it specifies patterns, and significantly simpler than the dictionaries in PETRARCH-1.
 
-* PETRARCH-2 actually incorporates some elements of the CAMEO ontology -- notably determining the scope of CAMEO 04 "CONSULT" events -- into the coder itself, as well as effectively redefining the 04 category compared to the
+* PETRARCH-3 actually incorporates some elements of the CAMEO ontology -- notably determining the scope of CAMEO 04 "CONSULT" events -- into the coder itself, as well as effectively redefining the 04 category compared to the
 TABARI and PETRARCH-1 implementations. In the PETRARCH-1 system, ontology implementation is done solely in the dictionaries.
 
-* Because PETRARCH-2 is more reliant on the deep parse, it is more sensitive to parsing errors on poorly-formed sentences. However, the deep parsing makes it much more robust against incorrectly assigning target actors.
+* Because PETRARCH-3 is more reliant on the deep parse, it is more sensitive to parsing errors on poorly-formed sentences. However, the deep parsing makes it much more robust against incorrectly assigning target actors.
 
-* PETRARCH-1 has a far more extensive validation suite than PETRARCH-2 has unit tests, and unfortunately due to the differences in the specification of verb patterns, the two are not compatible. (We would enthusiastically welcome additions to the unit tests!)
+* PETRARCH-1 has a far more extensive validation suite than PETRARCH-3 has unit tests, and unfortunately due to the differences in the specification of verb patterns, the two are not compatible. (We would enthusiastically welcome additions to the unit tests!)
 
 Despite these differences, the aggregate distributions of events in CAMEO 2-digit categories produced by the two systems in a test against a large corpus consisting of a wide variety of source materials (that is, not just sources with well-edited English) are quite similar, even though the results on individual stories only coincide about 40% of the time.
 
@@ -254,7 +256,7 @@ involve the following steps
  
   That is, all your "glue" program needs to do here is put the original text in the `<Text>` field and the parsed text in the     `<Parse>` field, plus add a date and a unique identifier plus whatever else you want to pull in. 
 
-5.  Run that through PETRARCH-2: if you have a large number of files (which is typical when you're in a batch 
+5.  Run that through PETRARCH-3: if you have a large number of files (which is typical when you're in a batch 
 situation) you'll want to break these PETRARCH-2 inputs into multiple files, then run them using in a script or across multiple machines, finally combine the output files with the coded events (multiple-event filtering can also be done at this stage if you are so inclined).
 
 6. The Mordecai geolocation program is a separate process: run it on the original texts and then merge that with the events if you need geolocation.
@@ -262,7 +264,7 @@ situation) you'll want to break these PETRARCH-2 inputs into multiple files, the
 
 That's it: the downside of the file-based approach is you are left with a gadzillion little files in steps [1] and [3] and the disk-based rather than RAM-based approach is doubtlessly a bit slower, but CoreNLP is the main bottleneck. Upside is these are really basic discrete steps and easy to diagnose.
 
-In terms of time required using this approach, a ca. 2013 iMac (3.2 Ghz Intel Core i5 with 16Gb RAM) processed about 2500 stories per hour in CoreNLP (using the shift-reduce parser), running two instances of the program, then roughly 900,000 sentences per hour with a single instance PETRARCH-2. These figures were from a largely unfiltered Lexis-Nexis corpus, and a small number of stories (typically those where sentence segmenting went awry) used a disproportionate amount of time because CoreNLP pursued a large number of dead-ends before giving up: pre-filtering to insure that sentences are typical of those which will generate events should increase the overall coding speed somewhat. We've yet to do speed checks on Amazon Web Services instances though they are probably roughly comparable (both CoreNLP and PETRARCH-2 work fine on AWS).
+In terms of time required using this approach, a ca. 2013 iMac (3.2 Ghz Intel Core i5 with 16Gb RAM) processed about 2500 stories per hour in CoreNLP (using the shift-reduce parser), running two instances of the program, then roughly 900,000 sentences per hour with a single instance PETRARCH-3. These figures were from a largely unfiltered Lexis-Nexis corpus, and a small number of stories (typically those where sentence segmenting went awry) used a disproportionate amount of time because CoreNLP pursued a large number of dead-ends before giving up: pre-filtering to insure that sentences are typical of those which will generate events should increase the overall coding speed somewhat. We've yet to do speed checks on Amazon Web Services instances though they are probably roughly comparable (both CoreNLP and PETRARCH-3 work fine on AWS).
 
 
 ## Contributing
