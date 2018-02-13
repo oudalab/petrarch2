@@ -203,7 +203,7 @@ def do_coding(event_dict):
         prev_code = []
 
         SkipStory = False
-        print('\n\nProcessing story {}'.format(key))
+        logging.info('\n\nProcessing story {}'.format(key))
         StoryDate = event_dict[key]['meta']['date']
         for sent in val['sents']:
             NSent += 1
@@ -218,18 +218,18 @@ def do_coding(event_dict):
                     'date'] if 'date' in event_dict[key]['sents'][sent] else StoryDate
                 Date = PETRreader.dstr_to_ordate(SentenceDate)
 
-                print("\n", SentenceID)
+                logging.info("\n", SentenceID)
                 parsed = event_dict[key]['sents'][sent]['parsed']
                 treestr = parsed
                 disc = check_discards(SentenceText)
                 if disc[0] > 0:
                     if disc[0] == 1:
-                        print("Discard sentence:", disc[1])
+                        logging.info("Discard sentence:", disc[1])
                         logger.info('\tSentence discard. {}'.format(disc[1]))
                         NDiscardSent += 1
                         continue
                     else:
-                        print("Discard story:", disc[1])
+                        logging.info("Discard story:", disc[1])
                         logger.info('\tStory discard. {}'.format(disc[1]))
                         SkipStory = True
                         NDiscardStory += 1
@@ -237,7 +237,7 @@ def do_coding(event_dict):
 
                 t1 = time.time()
                 sentence = PETRtree.Sentence(treestr, SentenceText, Date)
-                print(sentence.txt)
+                logging.info(sentence.txt)
                 # this is the entry point into the processing in PETRtree
                 coded_events, meta = sentence.get_events()
                 code_time = time.time() - t1
@@ -307,22 +307,22 @@ def do_coding(event_dict):
         if SkipStory:
             event_dict[key]['sents'] = None
 
-    print("\nSummary:")
-    print(
+    logging.info("\nSummary:")
+    logging.info(
         "Stories read:",
         NStory,
         "   Sentences coded:",
         NSent,
         "  Events generated:",
         NEvents)
-    print(
+    logging.info(
         "Discards:  Sentence",
         NDiscardSent,
         "  Story",
         NDiscardStory,
         "  Sentences without events:",
         NEmpty)
-    print("Average Coding time = ", times / sents if sents else 0)
+    logging.info("Average Coding time = ", times / sents if sents else 0)
 # --    print('DC-exit:',event_dict)
     return event_dict
 
@@ -405,9 +405,9 @@ def main():
 
     PETRglobals.RunTimeString = time.asctime()
 
-    print(cli_args)
+    logging.info(cli_args)
     if cli_args.config:
-        print('Using user-specified config: {}'.format(cli_args.config))
+        logging.info('Using user-specified config: {}'.format(cli_args.config))
         logger.info(
             'Using user-specified config: {}'.format(cli_args.config))
         PETRreader.parse_Config(cli_args.config)
@@ -417,14 +417,14 @@ def main():
                                                     'PETR_config.ini'))
 
     if cli_args.nullverbs:
-        print('Coding in null verbs mode; no events will be generated')
+        logging.info('Coding in null verbs mode; no events will be generated')
         logger.info(
             'Coding in null verbs mode; no events will be generated')
         # Only get verb phrases that are not in the dictionary but are
         # associated with coded noun phrases
         PETRglobals.NullVerbs = True
     elif cli_args.nullactors:
-        print('Coding in null actors mode; no events will be generated')
+        logging.info('Coding in null actors mode; no events will be generated')
         logger.info(
             'Coding in null verbs mode; no events will be generated')
         # Only get actor phrases that are not in the dictionary but
@@ -434,7 +434,7 @@ def main():
 
     read_dictionaries()
     start_time = time.time()
-    print('\n\n')
+    logging.info('\n\n')
 
     paths = PETRglobals.TextFileList
     if cli_args.inputs:
@@ -446,7 +446,7 @@ def main():
         elif os.path.isfile(cli_args.inputs):
             paths = [cli_args.inputs]
         else:
-            print(
+            logging.info(
                 '\nFatal runtime error:\n"' +
                 cli_args.inputs +
                 '" could not be located\nPlease enter a valid directory or file of source texts.')
@@ -462,36 +462,36 @@ def main():
     else:
         run(paths, out, True)  # <===
 
-    print("Coding time:", time.time() - start_time)
+    logging.info("Coding time:", time.time() - start_time)
 
-    print("Finished")
+    logging.info("Finished")
 
 
 def read_dictionaries(validation=False):
 
-    print('Verb dictionary:', PETRglobals.VerbFileName)
+    logging.info('Verb dictionary:', PETRglobals.VerbFileName)
     verb_path = utilities._get_data(
         'data/dictionaries',
         PETRglobals.VerbFileName)
     PETRreader.read_verb_dictionary(verb_path)
 
-    print('Actor dictionaries:', PETRglobals.ActorFileList)
+    logging.info('Actor dictionaries:', PETRglobals.ActorFileList)
     for actdict in PETRglobals.ActorFileList:
         actor_path = utilities._get_data('data/dictionaries', actdict)
         PETRreader.read_actor_dictionary(actor_path)
 
-    print('Agent dictionary:', PETRglobals.AgentFileName)
+    logging.info('Agent dictionary:', PETRglobals.AgentFileName)
     agent_path = utilities._get_data('data/dictionaries',
                                      PETRglobals.AgentFileName)
     PETRreader.read_agent_dictionary(agent_path)
 
-    print('Discard dictionary:', PETRglobals.DiscardFileName)
+    logging.info('Discard dictionary:', PETRglobals.DiscardFileName)
     discard_path = utilities._get_data('data/dictionaries',
                                        PETRglobals.DiscardFileName)
     PETRreader.read_discard_list(discard_path)
 
     if PETRglobals.IssueFileName != "":
-        print('Issues dictionary:', PETRglobals.IssueFileName)
+        logging.info('Issues dictionary:', PETRglobals.IssueFileName)
         issue_path = utilities._get_data('data/dictionaries',
                                          PETRglobals.IssueFileName)
         PETRreader.read_issue_list(issue_path)
@@ -517,7 +517,7 @@ def run_pipeline(data, out_file=None, config=None, write_output=True,
     utilities.init_logger('PETRARCH.log')
     logger = logging.getLogger('petr_log')
     if config:
-        print('Using user-specified config: {}'.format(config))
+        logging.info('Using user-specified config: {}'.format(config))
         logger.info('Using user-specified config: {}'.format(config))
         PETRreader.parse_Config(config)
     else:
@@ -544,7 +544,7 @@ def run_pipeline(data, out_file=None, config=None, write_output=True,
         output_events = PETRwriter.pipe_output(updated_events)
         return output_events
     elif write_output and not out_file:
-        print('Please specify an output file...')
+        logging.info('Please specify an output file...')
         logger.warning('Need an output file. ¯\_(ツ)_/¯')
         sys.exit()
     elif write_output and out_file:

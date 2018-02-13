@@ -179,7 +179,7 @@ def extract_phrases(sent_dict, sent_id):
                 return get_text_phrase(tarst[1:])
         else:
             logger.info('ut.EP {} text not found. {}'.format(sent_id, typest))
-            print('ut.EP {} text not found. {}'.format(sent_id, typest))
+            #print('ut.EP {} text not found. {}'.format(sent_id, typest))
             return '---'
 
     def get_actor_root(code):
@@ -251,7 +251,7 @@ def extract_phrases(sent_dict, sent_id):
     keylist = list(sent_dict['meta'].keys())
     if len(keylist) < 2:
         logger.info('ut.EP {} len(keylist) < 2 {}'.format(sent_id, keylist))
-        print('ut.EP {} len(keylist) < 2 {}'.format(sent_id, keylist))
+        #print('ut.EP {} len(keylist) < 2 {}'.format(sent_id, keylist))
     for evt in keylist:
         if evt == 'nouns':
             continue
@@ -447,7 +447,7 @@ def code_to_string(events):
         return retstr[:-3]
 
     except Exception as e:
-        print(e)
+        logging.info(e)
         return str(events)
 
 
