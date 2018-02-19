@@ -545,7 +545,7 @@ def run_pipeline(data, out_file=None, config=None, write_output=True,
         return output_events
     elif write_output and not out_file:
         logging.info('Please specify an output file...')
-        logger.warning('Need an output file. ¯\_(ツ)_/¯')
+        logger.info('Need an output file. ¯\_(ツ)_/¯')
         sys.exit()
     elif write_output and out_file:
         PETRwriter.write_events(updated_events, out_file)
