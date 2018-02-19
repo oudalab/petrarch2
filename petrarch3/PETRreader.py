@@ -261,7 +261,7 @@ def parse_Config(config_path):
                 PETRglobals.CommaEMax)
 
     except Exception as e:
-        logging.warning(
+        logging.debug(
             'parse_config() encountered an error: check the options in',
             PETRglobals.ConfigFileName)
         logging.error("Terminating program")
@@ -765,7 +765,7 @@ def read_verb_dictionary(verb_path):
                         lines += resolve_synset(line.replace(set, plural, 1))
                 return lines
             else:
-                logging.warning("Undefined synset", set)
+                logging.debug("Undefined synset", set)
         return [line]
 
     def resolve_patseg(segment):
@@ -1401,7 +1401,7 @@ def _read_verb_dictionary(verb_path):
                     logging.info(sorted(PETRglobals.VerbDict.keys()))
                     exit()
 
-                    logger.warning("Synset " + phlist[ka] +
+                    logger.debug("Synset " + phlist[ka] +
                                    " has not been defined; pattern skipped")
                     raise ValueError  # this will do...
             ka += 2
@@ -1466,7 +1466,7 @@ def _read_verb_dictionary(verb_path):
                         1:], dict='verbs', line=line)
 
             else:
-                logger.warning(
+                logger.debug(
                     'Error in read_verb_dictionary()/store_multi_word_verb(): ' +
                     phrase +
                     ' in ' +
@@ -2015,7 +2015,7 @@ def read_agent_dictionary(agent_path):
                 line.find('!') +
                 1:].find('!') < 0 or line[
                 line.find('!'):].find('=') < 0:
-            logger.warning(markdeferrorstr + enderrorstr)
+            logger.debug(markdeferrorstr + enderrorstr)
             return
         ka = line.find('!') + 1
         marker = line[ka:line.find('!', ka)]
@@ -2030,14 +2030,14 @@ def read_agent_dictionary(agent_path):
         global subdict
         if agent[agent.find('!') + 1:].find('!') < 0:
             ka = agent.find('!')
-            logger.warning("Substitution marker \"" +
+            logger.debug("Substitution marker \"" +
                            agent[ka:agent.find(' ', ka) + 1] +
                            "\" syntax incorrect" + enderrorstr)
             return
         part = agent.partition('!')
         part2 = part[2].partition('!')
         if part2[0] not in subdict:
-            logger.warning("Substitution marker !" + part2[0] +
+            logger.debug("Substitution marker !" + part2[0] +
                            "! missing in .agents file; line skipped")
             return
         for subst in subdict[part2[0]]:
@@ -2067,7 +2067,7 @@ def read_agent_dictionary(agent_path):
             continue
 
         if '[' not in line:  # code specified?
-            logger.warning(codeerrorstr + enderrorstr)
+            logger.debug(codeerrorstr + enderrorstr)
             line = read_FIN_line()
             continue
 
@@ -2078,7 +2078,7 @@ def read_agent_dictionary(agent_path):
             store_marker(agent, code)  # handle a substitution marker
         elif '{' in part[0]:
             if '}' not in part[0]:
-                logger.warning(brackerrorstr + enderrorstr)
+                logger.debug(brackerrorstr + enderrorstr)
                 line = read_FIN_line()
                 continue
             agent = part[0][:part[0].find('{')].strip() + ' '
@@ -2143,7 +2143,7 @@ def read_xml_input(filepaths, parsed=False):
                 attribute_check = [key in story.attrib for key in
                                    ['date', 'id', 'sentence', 'source']]
                 if not attribute_check:
-                    logging.warning('Need to properly format your XML...')
+                    logging.debug('Need to properly format your XML...')
                     break
 
                 # If the XML contains StanfordNLP parsed data, pull that out

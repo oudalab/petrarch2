@@ -978,7 +978,7 @@ class VerbPhrase(Phrase):
                         break
 
         else:
-            logging.warn("Error in passive check")
+            logging.debug("Error in passive check")
         self.passive = False
         return False
 
