@@ -109,7 +109,7 @@ def parse_Config(config_path):
         else:
             return False
 
-    logging.info('\n', end=' ')
+    # logging.info('\n', end=' ')
     parser = ConfigParser()
 #		logger.info('Found a config file in working directory')
 #	print "pc",PETRglobals.ConfigFileName
@@ -230,7 +230,7 @@ def parse_Config(config_path):
             raise
         logging.info("Comma-delimited clause elimination:")
         #print("Initial :", end=' ')
-        logging.info("Initial :", end=' ')
+        #logging.info("Initial :", end=' ')
         if PETRglobals.CommaBMax == 0:
             logging.info("deactivated")
         else:
