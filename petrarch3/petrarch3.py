@@ -203,7 +203,7 @@ def do_coding(event_dict):
         prev_code = []
 
         SkipStory = False
-        logging.info('\n\nProcessing story {}'.format(key))
+        #logging.info('\n\nProcessing story {}'.format(key))
         StoryDate = event_dict[key]['meta']['date']
         for sent in val['sents']:
             NSent += 1
@@ -218,26 +218,26 @@ def do_coding(event_dict):
                     'date'] if 'date' in event_dict[key]['sents'][sent] else StoryDate
                 Date = PETRreader.dstr_to_ordate(SentenceDate)
 
-                logging.info("\n", SentenceID)
+                #logging.info(f"\n{SentenceID}")
                 parsed = event_dict[key]['sents'][sent]['parsed']
                 treestr = parsed
                 disc = check_discards(SentenceText)
                 if disc[0] > 0:
                     if disc[0] == 1:
-                        logging.info("Discard sentence:", disc[1])
-                        logger.info('\tSentence discard. {}'.format(disc[1]))
+                        #logging.info("Discard sentence:", disc[1])
+                        #logger.info('\tSentence discard. {}'.format(disc[1]))
                         NDiscardSent += 1
                         continue
                     else:
-                        logging.info("Discard story:", disc[1])
-                        logger.info('\tStory discard. {}'.format(disc[1]))
+                        #logging.info("Discard story:", disc[1])
+                        #logger.info('\tStory discard. {}'.format(disc[1]))
                         SkipStory = True
                         NDiscardStory += 1
                         break
 
                 t1 = time.time()
                 sentence = PETRtree.Sentence(treestr, SentenceText, Date)
-                logging.info(sentence.txt)
+                #logging.info(sentence.txt)
                 # this is the entry point into the processing in PETRtree
                 coded_events, meta = sentence.get_events()
                 code_time = time.time() - t1
@@ -301,28 +301,28 @@ def do_coding(event_dict):
                 if len(coded_events) == 0:
                     NEmpty += 1
             else:
-                logger.info('{} has no parse information. Passing.'.format(SentenceID))
+                #logger.info('{} has no parse information. Passing.'.format(SentenceID))
                 pass
 
         if SkipStory:
             event_dict[key]['sents'] = None
 
-    logging.info("\nSummary:")
-    logging.info(
-        "Stories read:",
-        NStory,
-        "   Sentences coded:",
-        NSent,
-        "  Events generated:",
-        NEvents)
-    logging.info(
-        "Discards:  Sentence",
-        NDiscardSent,
-        "  Story",
-        NDiscardStory,
-        "  Sentences without events:",
-        NEmpty)
-    logging.info("Average Coding time = ", times / sents if sents else 0)
+    #logging.info("\nSummary:")
+    #logging.info(
+    #    "Stories read:",
+    #    NStory,
+    #    "   Sentences coded:",
+    #    NSent,
+    #    "  Events generated:",
+    #    NEvents)
+    #logging.info(
+    #    "Discards:  Sentence",
+    #    NDiscardSent,
+    #    "  Story",
+    #    NDiscardStory,
+    #    "  Sentences without events:",
+    #    NEmpty)
+    #logging.info("Average Coding time = ", times / sents if sents else 0) possible division by zero error
 # --    print('DC-exit:',event_dict)
     return event_dict
 
@@ -405,28 +405,28 @@ def main():
 
     PETRglobals.RunTimeString = time.asctime()
 
-    logging.info(cli_args)
+    #logging.info(cli_args)
     if cli_args.config:
-        logging.info('Using user-specified config: {}'.format(cli_args.config))
-        logger.info(
-            'Using user-specified config: {}'.format(cli_args.config))
+        #logging.info('Using user-specified config: {}'.format(cli_args.config))
+        #logger.info(
+        #    'Using user-specified config: {}'.format(cli_args.config))
         PETRreader.parse_Config(cli_args.config)
     else:
-        logger.info('Using default config file.')
+        #logger.info('Using default config file.')
         PETRreader.parse_Config(utilities._get_data('data/config/',
                                                     'PETR_config.ini'))
 
     if cli_args.nullverbs:
-        logging.info('Coding in null verbs mode; no events will be generated')
-        logger.info(
-            'Coding in null verbs mode; no events will be generated')
+        #logging.info('Coding in null verbs mode; no events will be generated')
+        #logger.info(
+        #    'Coding in null verbs mode; no events will be generated')
         # Only get verb phrases that are not in the dictionary but are
         # associated with coded noun phrases
         PETRglobals.NullVerbs = True
     elif cli_args.nullactors:
-        logging.info('Coding in null actors mode; no events will be generated')
-        logger.info(
-            'Coding in null verbs mode; no events will be generated')
+        #logging.info('Coding in null actors mode; no events will be generated')
+        #logger.info(
+        #    'Coding in null verbs mode; no events will be generated')
         # Only get actor phrases that are not in the dictionary but
         # associated with coded verb phrases
         PETRglobals.NullActors = True
@@ -434,7 +434,7 @@ def main():
 
     read_dictionaries()
     start_time = time.time()
-    logging.info('\n\n')
+    #logging.info('\n\n')
 
     paths = PETRglobals.TextFileList
     if cli_args.inputs:
@@ -446,10 +446,10 @@ def main():
         elif os.path.isfile(cli_args.inputs):
             paths = [cli_args.inputs]
         else:
-            logging.info(
-                '\nFatal runtime error:\n"' +
-                cli_args.inputs +
-                '" could not be located\nPlease enter a valid directory or file of source texts.')
+            #logging.info(
+            #    '\nFatal runtime error:\n"' +
+            #    cli_args.inputs +
+            #    '" could not be located\nPlease enter a valid directory or file of source texts.')
             sys.exit()
 
     out = ""  # PETRglobals.EventFileName
@@ -462,36 +462,36 @@ def main():
     else:
         run(paths, out, True)  # <===
 
-    logging.info("Coding time:", time.time() - start_time)
+    #logging.info("Coding time:", time.time() - start_time)
 
-    logging.info("Finished")
+    #logging.info("Finished")
 
 
 def read_dictionaries(validation=False):
 
-    logging.info('Verb dictionary:', PETRglobals.VerbFileName)
+    #logging.info('Verb dictionary:', PETRglobals.VerbFileName)
     verb_path = utilities._get_data(
         'data/dictionaries',
         PETRglobals.VerbFileName)
     PETRreader.read_verb_dictionary(verb_path)
 
-    logging.info('Actor dictionaries:', PETRglobals.ActorFileList)
+    #logging.info('Actor dictionaries:', PETRglobals.ActorFileList)
     for actdict in PETRglobals.ActorFileList:
         actor_path = utilities._get_data('data/dictionaries', actdict)
         PETRreader.read_actor_dictionary(actor_path)
 
-    logging.info('Agent dictionary:', PETRglobals.AgentFileName)
+    #logging.info('Agent dictionary:', PETRglobals.AgentFileName)
     agent_path = utilities._get_data('data/dictionaries',
                                      PETRglobals.AgentFileName)
     PETRreader.read_agent_dictionary(agent_path)
 
-    logging.info('Discard dictionary:', PETRglobals.DiscardFileName)
+    #logging.info('Discard dictionary:', PETRglobals.DiscardFileName)
     discard_path = utilities._get_data('data/dictionaries',
                                        PETRglobals.DiscardFileName)
     PETRreader.read_discard_list(discard_path)
 
     if PETRglobals.IssueFileName != "":
-        logging.info('Issues dictionary:', PETRglobals.IssueFileName)
+        #logging.info('Issues dictionary:', PETRglobals.IssueFileName)
         issue_path = utilities._get_data('data/dictionaries',
                                          PETRglobals.IssueFileName)
         PETRreader.read_issue_list(issue_path)
@@ -517,25 +517,25 @@ def run_pipeline(data, out_file=None, config=None, write_output=True,
     utilities.init_logger('PETRARCH.log')
     logger = logging.getLogger('petr_log')
     if config:
-        logging.info('Using user-specified config: {}'.format(config))
-        logger.info('Using user-specified config: {}'.format(config))
+        #logging.info('Using user-specified config: {}'.format(config))
+        #logger.info('Using user-specified config: {}'.format(config))
         PETRreader.parse_Config(config)
     else:
-        logger.info('Using default config file.')
-        logger.info(
-            'Config path: {}'.format(
-                utilities._get_data(
-                    'data/config/',
-                    'PETR_config.ini')))
+        #logger.info('Using default config file.')
+        #logger.info(
+        #    'Config path: {}'.format(
+        #        utilities._get_data(
+        #            'data/config/',
+        #            'PETR_config.ini')))
         PETRreader.parse_Config(utilities._get_data('data/config/',
                                                     'PETR_config.ini'))
 
     read_dictionaries()
 
-    logger.info('Hitting read events...')
+    #logger.info('Hitting read events...')
     events = PETRreader.read_pipeline_input(data)
     if parsed:
-        logger.info('Hitting do_coding')
+        #logger.info('Hitting do_coding')
         updated_events = do_coding(events)
     else:
         events = utilities.stanford_parse(events)
@@ -544,8 +544,8 @@ def run_pipeline(data, out_file=None, config=None, write_output=True,
         output_events = PETRwriter.pipe_output(updated_events)
         return output_events
     elif write_output and not out_file:
-        logging.info('Please specify an output file...')
-        logger.info('Need an output file. ¯\_(ツ)_/¯')
+        #logging.info('Please specify an output file...')
+        #logger.info('Need an output file. ¯\_(ツ)_/¯')
         sys.exit()
     elif write_output and out_file:
         PETRwriter.write_events(updated_events, out_file)
