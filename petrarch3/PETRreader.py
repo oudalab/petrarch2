@@ -98,13 +98,13 @@ def parse_Config(config_path):
         if parser.has_option('Options', optname):
             try:
                 result = parser.getboolean('Options', optname)
-                logging.info(optname, "=", result)
+                pass # logging.info(optname, "=", result)
                 return result
             except ValueError:
-                logging.info(
-                    "Error in config.ini: " +
-                    optname +
-                    " value must be `true' or `false'")
+                #logging.info(
+                #    "Error in config.ini: " +
+                #    optname +
+                #    " value must be `true' or `false'")
                 raise
         else:
             return False
@@ -115,10 +115,10 @@ def parse_Config(config_path):
 #	print "pc",PETRglobals.ConfigFileName
     confdat = parser.read(config_path)
     if len(confdat) == 0:
-        logging.info(
-            "\aError: Could not find the config file:",
-            PETRglobals.ConfigFileName)
-        logging.info("Terminating program")
+        #logging.info(
+        #    "\aError: Could not find the config file:",
+        #    PETRglobals.ConfigFileName)
+        #logging.info("Terminating program")
         sys.exit()
 
     try:
@@ -147,10 +147,10 @@ def parse_Config(config_path):
                 try:
                     fpar = open(filename, 'r')
                 except IOError:
-                    logging.error(
-                        "\aError: Could not find the text file list file:",
-                        filename)
-                    logging.error("Terminating program")
+                    #logging.error(
+                    #    "\aError: Could not find the text file list file:",
+                    #    filename)
+                    #logging.error("Terminating program")
                     sys.exit()
                 PETRglobals.TextFileList = []
                 line = fpar.readline()
@@ -174,10 +174,10 @@ def parse_Config(config_path):
                     'Options',
                     'new_actor_length')
             except ValueError:
-                logging.error(
-                    "Error in config.ini Option: new_actor_length value must be an integer")
-                raise
-        logging.info("new_actor_length =", PETRglobals.NewActorLength)
+                #logging.error(
+                #    "Error in config.ini Option: new_actor_length value must be an integer")
+                #raise
+        #logging.info("new_actor_length =", PETRglobals.NewActorLength)
 
         PETRglobals.StoponError    = get_config_boolean('stop_on_error')
         PETRglobals.WriteActorRoot = get_config_boolean('write_actor_root')
@@ -199,17 +199,17 @@ def parse_Config(config_path):
         PETRglobals.CodeBySentence = parser.has_option(
             'Options',
             'code_by_sentence')
-        logging.info("code-by-sentence", PETRglobals.CodeBySentence)
+        #logging.info("code-by-sentence", PETRglobals.CodeBySentence)
 
         PETRglobals.PauseBySentence = parser.has_option(
             'Options',
             'pause_by_sentence')
-        logging.info("pause_by_sentence", PETRglobals.PauseBySentence)
+        #logging.info("pause_by_sentence", PETRglobals.PauseBySentence)
 
         PETRglobals.PauseByStory = parser.has_option(
             'Options',
             'pause_by_story')
-        logging.info("pause_by_story", PETRglobals.PauseByStory)
+        #logging.info("pause_by_story", PETRglobals.PauseByStory)
 
         try:
             if parser.has_option('Options', 'comma_min'):
@@ -225,46 +225,46 @@ def parse_Config(config_path):
             elif parser.has_option('Options', 'comma_emax'):
                 PETRglobals.CommaEMax = parser.getint('Options', 'comma_emax')
         except ValueError:
-            logging.error(
-                "Error in config.ini Option: comma_*  value must be an integer")
+            #logging.error(
+            #    "Error in config.ini Option: comma_*  value must be an integer")
             raise
-        logging.info("Comma-delimited clause elimination:")
+        #logging.info("Comma-delimited clause elimination:")
         #print("Initial :", end=' ')
         #logging.info("Initial :", end=' ')
         if PETRglobals.CommaBMax == 0:
-            logging.info("deactivated")
+            pass #logging.info("deactivated")
         else:
-            logging.info(
-                "min =",
-                PETRglobals.CommaBMin,
-                "   max =",
-                PETRglobals.CommaBMax)
+            pass #logging.info(
+            #    "min =",
+            #    PETRglobals.CommaBMin,
+            #    "   max =",
+            #    PETRglobals.CommaBMax)
         #print("Internal:", end=' ')
-        logging.info("Internal:")
+        #logging.info("Internal:")
         if PETRglobals.CommaMax == 0:
-            logging.info("deactivated")
+            pass #logging.info("deactivated")
         else:
-            logging.info(
-                "min =",
-                PETRglobals.CommaMin,
-                "   max =",
-                PETRglobals.CommaMax)
+            pass #logging.info(
+            #    "min =",
+            #    PETRglobals.CommaMin,
+            #    "   max =",
+            #    PETRglobals.CommaMax)
         #print("Terminal:", end=' ')
-        logging.info("Terminal:")
+        #logging.info("Terminal:")
         if PETRglobals.CommaEMax == 0:
-            logging.info("deactivated")
+            pass #logging.info("deactivated")
         else:
-            logging.info(
-                "min =",
-                PETRglobals.CommaEMin,
-                "   max =",
-                PETRglobals.CommaEMax)
+            pass # logging.info(
+            #    "min =",
+            #    PETRglobals.CommaEMin,
+            #    "   max =",
+            #    PETRglobals.CommaEMax)
 
     except Exception as e:
-        logging.debug(
-            'parse_config() encountered an error: check the options in',
-            PETRglobals.ConfigFileName)
-        logging.error("Terminating program")
+        #logging.debug(
+        #    'parse_config() encountered an error: check the options in',
+        #    PETRglobals.ConfigFileName)
+        #logging.error("Terminating program")
         sys.exit()
 #		logger.warning('Problem parsing config file. {}'.format(e))
 
@@ -282,8 +282,8 @@ def open_FIN(filename, descrstr):
         CurrentFINname = filename
         FINnline = 0
     except IOError:
-        logging.error("\aError: Could not find the", descrstr, "file:", filename)
-        logging.error("Terminating program")
+        #logging.error("\aError: Could not find the", descrstr, "file:", filename)
+        #logging.error("Terminating program")
         sys.exit()
 
 
@@ -295,8 +295,8 @@ def close_FIN():
     try:
         FIN.close()
     except IOError:
-        logging.error("\aError: Could not close the input file")
-        logging.error("Terminating program")
+        #logging.error("\aError: Could not close the input file")
+        #logging.error("Terminating program")
         sys.exit()
 
 
@@ -359,7 +359,7 @@ def read_FIN_line():
             FINnline += 1
             continue
         if not line:  # handle EOF
-            logging.info("EOF hit in read_FIN_line()")
+            #logging.info("EOF hit in read_FIN_line()")
             raise EOFError
             return line
         if ('#' in line):
@@ -588,7 +588,7 @@ def read_issue_list(issue_path):
     """
     PETRglobals.IssueList = {}
     logger = logging.getLogger('petr_log')
-    logger.info("Reading " + PETRglobals.IssueFileName)
+    #logger.info("Reading " + PETRglobals.IssueFileName)
     open_FIN(issue_path, "issues")
 
     PETRglobals.IssueCodes.append('~')  # initialize the ignore codes
@@ -713,7 +713,7 @@ def read_verb_dictionary(verb_path):
     """
 
     logger = logging.getLogger('petr_log')
-    logger.info("Reading " + PETRglobals.VerbFileName)
+    #logger.info("Reading " + PETRglobals.VerbFileName)
     file = open(verb_path, 'r')
 
     block_meaning = ""
@@ -765,7 +765,7 @@ def read_verb_dictionary(verb_path):
                         lines += resolve_synset(line.replace(set, plural, 1))
                 return lines
             else:
-                logging.debug("Undefined synset", set)
+                pass #logging.debug("Undefined synset", set)
         return [line]
 
     def resolve_patseg(segment):
@@ -1397,8 +1397,8 @@ def _read_verb_dictionary(verb_path):
             if len(phlist[ka]) > 0:
                 if (phlist[ka][0] == '&') and (
                         phlist[ka] not in PETRglobals.VerbDict):
-                    logging.info("WTF", phlist[ka])
-                    logging.info(sorted(PETRglobals.VerbDict.keys()))
+                    #logging.info("WTF", phlist[ka])
+                    #logging.info(sorted(PETRglobals.VerbDict.keys()))
                     exit()
 
                     logger.debug("Synset " + phlist[ka] +
@@ -1507,7 +1507,7 @@ def _read_verb_dictionary(verb_path):
 
     # note that this will be ignored if there are no errors
     logger = logging.getLogger('petr_log')
-    logger.info("Reading " + PETRglobals.VerbFileName)
+    #logger.info("Reading " + PETRglobals.VerbFileName)
     open_FIN(verb_path, "verb")
 
     theverb = ''
@@ -1662,14 +1662,14 @@ def show_verb_dictionary(filename=''):
 
     else:
         for locword, loclist in list(PETRglobals.VerbDict.items()):
-            logging.info(locword)
+            #logging.info(locword)
             if loclist[0]:
                 if len(loclist) > 2:
-                    logging.info('::\n', loclist[1:])   # pattern list
+                    pass #logging.info('::\n', loclist[1:])   # pattern list
                 else:
-                    logging.info(':: ', loclist[1])   # simple code
+                    pass #logging.info(':: ', loclist[1])   # simple code
             else:
-                logging.info('-> ', loclist[2], '[' + loclist[1] + ']')
+                pass #logging.info('-> ', loclist[2], '[' + loclist[1] + ']')
 
 # ================== ACTOR DICTIONARY INPUT ================== #
 
@@ -1837,7 +1837,7 @@ def read_actor_dictionary(actorfile):
                             targ = targ[1:]
                             continue
                         if not isinstance(actordict, dict):
-                            logging.info("BADNESS", actordict)
+                            #logging.info("BADNESS", actordict)
                             exit()
 
                         if targ[0] not in actordict:
@@ -2055,7 +2055,7 @@ def read_agent_dictionary(agent_path):
 
     # note that this will be ignored if there are no errors
     logger = logging.getLogger('petr_log')
-    logger.info("Reading " + PETRglobals.AgentFileName + "\n")
+    #logger.info("Reading " + PETRglobals.AgentFileName + "\n")
     open_FIN(agent_path, "agent")
 
     line = read_FIN_line()
@@ -2143,7 +2143,7 @@ def read_xml_input(filepaths, parsed=False):
                 attribute_check = [key in story.attrib for key in
                                    ['date', 'id', 'sentence', 'source']]
                 if not attribute_check:
-                    logging.debug('Need to properly format your XML...')
+                    #logging.debug('Need to properly format your XML...')
                     break
 
                 # If the XML contains StanfordNLP parsed data, pull that out
