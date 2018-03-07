@@ -178,7 +178,7 @@ def extract_phrases(sent_dict, sent_id):
 # --                print(typest + ' text:',tarst)
                 return get_text_phrase(tarst[1:])
         else:
-            logger.info('ut.EP {} text not found. {}'.format(sent_id, typest))
+            #logger.info('ut.EP {} text not found. {}'.format(sent_id, typest))
             #print('ut.EP {} text not found. {}'.format(sent_id, typest))
             return '---'
 
@@ -250,7 +250,7 @@ def extract_phrases(sent_dict, sent_id):
     ucont = sent_dict['content'].upper()
     keylist = list(sent_dict['meta'].keys())
     if len(keylist) < 2:
-        logger.info('ut.EP {} len(keylist) < 2 {}'.format(sent_id, keylist))
+        pass #logger.info('ut.EP {} len(keylist) < 2 {}'.format(sent_id, keylist))
         #print('ut.EP {} len(keylist) < 2 {}'.format(sent_id, keylist))
     for evt in keylist:
         if evt == 'nouns':
