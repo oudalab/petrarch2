@@ -979,6 +979,7 @@ class VerbPhrase(Phrase):
 
         else:
             #logging.debug("Error in passive check")
+            pass
         self.passive = False
         return False
 
