@@ -135,10 +135,10 @@ class Phrase:
 
     def indented_parse_print(self, level=0):
         """ recursive print of labeled phrase elements and children with line feeds and indentation """
-        logging.info('  ' * level + '(' + self.label + ' ' + self.text, end='')
+        #logging.info('  ' * level + '(' + self.label + ' ' + self.text, end='')
         for child in self.children:
             child.indented_parse_print(level + 1)
-            logging.info('  ' * level + ')')
+            #logging.info('  ' * level + ')')
 
     def get_parse_string(self):
         """ recursive rendering of labelled phrase element and children as a string:
@@ -278,7 +278,7 @@ class Phrase:
             return (None, None)
 
     def print_to_stdout(self, indent):
-        logging.info(indent, self.label, self.text, self.get_meaning())
+        #logging.info(indent, self.label, self.text, self.get_meaning())
         for child in self.children:
             child.print_to_stdout(indent + "\t")
 
@@ -978,7 +978,7 @@ class VerbPhrase(Phrase):
                         break
 
         else:
-            logging.debug("Error in passive check")
+            #logging.debug("Error in passive check")
         self.passive = False
         return False
 
@@ -1596,12 +1596,12 @@ class Sentence:
     def print_nouns(self, label):  # --
         """ Debugging print """
         logger = logging.getLogger('petr_log')
-        logger.info(self.txt)
-        logger.info(self.events)
-        logging.info(label)
+        #logger.info(self.txt)
+        #logger.info(self.events)
+        #logging.info(label)
         for la in self.metadata['nouns']:
-            logging.info('    ', la)
-            logger.info('    ' + str(la))
+            #logging.info('    ', la)
+            #logger.info('    ' + str(la))
 
     def get_metadata(self, entry):
 
@@ -1665,7 +1665,7 @@ class Sentence:
                             event[1], str):
 
                         code = utilities.convert_code(event[2], 0)
-                        logging.info('checking event', event, hex(event[2]))
+                        #logging.info('checking event', event, hex(event[2]))
                         if event[0] and event[1] and code:
                             for source in event[0]:
                                 valid.append(
@@ -1713,7 +1713,7 @@ class Sentence:
 #--            print('GF3',valid,'\nGF4',meta) # --
             return valid, meta
         except Exception as e:  # 16.06.27 pas: need to log this, and also figure out where it comes from
-            logging.info("Error in parsing:", e)
+            #logging.info("Error in parsing:", e)
             return None, None
 
     '''def print_to_file(self,root,file = ""):
