@@ -1603,6 +1603,7 @@ class Sentence:
         for la in self.metadata['nouns']:
             #logging.info('    ', la)
             #logger.info('    ' + str(la))
+            pass
 
     def get_metadata(self, entry):
 
