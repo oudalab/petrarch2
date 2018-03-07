@@ -177,7 +177,7 @@ def parse_Config(config_path):
                 #logging.error(
                 #    "Error in config.ini Option: new_actor_length value must be an integer")
                 #raise
-        #logging.info("new_actor_length =", PETRglobals.NewActorLength)
+        pass #logging.info("new_actor_length =", PETRglobals.NewActorLength)
 
         PETRglobals.StoponError    = get_config_boolean('stop_on_error')
         PETRglobals.WriteActorRoot = get_config_boolean('write_actor_root')
@@ -199,17 +199,17 @@ def parse_Config(config_path):
         PETRglobals.CodeBySentence = parser.has_option(
             'Options',
             'code_by_sentence')
-        #logging.info("code-by-sentence", PETRglobals.CodeBySentence)
+        pass #logging.info("code-by-sentence", PETRglobals.CodeBySentence)
 
         PETRglobals.PauseBySentence = parser.has_option(
             'Options',
             'pause_by_sentence')
-        #logging.info("pause_by_sentence", PETRglobals.PauseBySentence)
+        pass #logging.info("pause_by_sentence", PETRglobals.PauseBySentence)
 
         PETRglobals.PauseByStory = parser.has_option(
             'Options',
             'pause_by_story')
-        #logging.info("pause_by_story", PETRglobals.PauseByStory)
+        pass #logging.info("pause_by_story", PETRglobals.PauseByStory)
 
         try:
             if parser.has_option('Options', 'comma_min'):
